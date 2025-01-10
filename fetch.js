@@ -1,17 +1,38 @@
 "use strict"
 
 document.addEventListener('DOMContentLoaded', () => {
-    let respuesta = {}
 
-    console.log(`Antes de fetch: ${JSON.stringify(respuesta)}`)
-    fetch('https://jsonplaceholder.typicode.com/todos/1')
-        .then(response => response.json())
-        .then(json => {
-            respuesta = json;
-            console.log(`Al acabar la request: ${JSON.stringify(respuesta)}`)
-        })
-        .catch(error => console.log('Ocurrió un error ¯\\_(ツ)_/¯'));
+    fetch('https://jsonplaceholder.typicode.com/posts/1')
+    .then(res => res.json())
+    .then(respuesta => {
+        let h1 = document.createElement('h1');
+        h1.textContent = respuesta.title;
 
-    setTimeout(() => console.log(`Al acabar el contador: ${JSON.stringify(respuesta)}`), 5);
-    console.log(`Despues de fetch: ${JSON.stringify(respuesta)}`)
+        let p = document.createElement('p');
+        p.textContent = respuesta.body;
+
+        let div = document.querySelector('.main');
+        div.appendChild(h1);
+        div.appendChild(p);
+
+        return fetch('https://jsonplaceholder.typicode.com/posts/1/comments')
+    })
+    .then(res => res.json())
+    .then(comentarios => {
+        comentarios.forEach(comentario => {            
+            let h2 = document.createElement('h2')
+            h2.textContent = comentario.name
+
+            let email = document.createElement('p')
+            email.textContent = comentario.email
+
+            let body = document.createElement('p')
+            body.textContent = comentario.body
+
+            let div = document.querySelector('.main');
+            div.appendChild(h2)
+            div.appendChild(email)
+            div.appendChild(body)
+        });
+    })
 });
